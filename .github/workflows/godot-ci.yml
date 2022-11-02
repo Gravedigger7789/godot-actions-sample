@@ -6,6 +6,9 @@ on:
 
 concurrency: ci-${{ github.ref }}
 
+env:
+  BUILD_DIRECTORY: ./build
+
 jobs:
   godot-export:
     strategy:
@@ -27,17 +30,17 @@ jobs:
           mv /root/.local/share/godot/templates/${{ matrix.godot_version }}.stable ~/.local/share/godot/templates/${{ matrix.godot_version }}.stable
       - name: Build Project
         run: |
-          mkdir -v -p "build"
+          mkdir -v -p "${{ env.BUILD_DIRECTORY }}"
           godot -v --export "${{ matrix.export_template }}"
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.export_template }}
-          path: build/
+          path: "${{ env.BUILD_DIRECTORY }}/"
       - name: Publish to GitHub Pages
         if: matrix.export_template == 'HTML5'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+          publish_dir: "${{ env.BUILD_DIRECTORY }}"
 
