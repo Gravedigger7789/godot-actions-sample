@@ -3,6 +3,10 @@
 .import/
 export.cfg
 export_presets.cfg
+logs/
+
+# Godot compiled binaries
+build/
 
 # Mono-specific ignores
 .mono/
